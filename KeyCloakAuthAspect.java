@@ -13,6 +13,7 @@ import ru.gkomega.router.model.dto.auth_dto.UserDto;
 import ru.gkomega.router.service.AuthorizationService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Slf4j
 @Aspect
@@ -36,12 +37,19 @@ public class KeyCloakAuthAspect {
         val token = httpServletRequest.getHeader(AUTH_HEADER);
         val session = httpServletRequest.getHeader(SESSION_HEADER);
         log.info("{} : {}", token, session);
-        httpServletRequest.setAttribute("user", getUser(token, session, project));
-        return pjP.proceed();
+        if (check(token, session, project)) {
+            return pjP.proceed();
+        } else {
+            throw new UnauthorizedException("user not found");
+        }
     }
 
-    private UserDto getUser(String token, String session, String project) {
-            return authorizationService.info(project, token);
+    private boolean check(String token, String session, String project) {
+        if (Objects.nonNull(token)) {
+            val userDto = authorizationService.newCheckToken(token, session, project);
+            return Objects.nonNull(userDto.getSub());
+        }
+        return false;
     }
 
 }
