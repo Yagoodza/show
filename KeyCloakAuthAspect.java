@@ -36,7 +36,7 @@ public class KeyCloakAuthAspect {
     public Object trace(ProceedingJoinPoint pjP, String project, HttpServletRequest httpServletRequest) throws Throwable {
         val token = httpServletRequest.getHeader(AUTH_HEADER);
         val session = httpServletRequest.getHeader(SESSION_HEADER);
-        log.info("{} : {}", token, session);
+        log.debug("{} : {}", token, session);
         if (check(token, session, project)) {
             return pjP.proceed();
         } else {
