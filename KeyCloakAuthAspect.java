@@ -25,11 +25,6 @@ public class KeyCloakAuthAspect {
     private static final String AUTH_HEADER = "Authorization";
     private static final String SESSION_HEADER = "Session";
 
-
-    // инфа тута
-    // https://habr.com/ru/post/428548/
-    // https://jstobigdata.com/spring/pointcut-expressions-in-spring-aop/
-
     @Pointcut("@annotation(ru.gkomega.router.aop.annotation.KeyCloakAuth) && " +
             "args(project,.., httpServletRequest)")
     public void keyCloakAuth(String project, HttpServletRequest httpServletRequest) {

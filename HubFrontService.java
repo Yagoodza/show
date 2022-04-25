@@ -105,7 +105,10 @@ public class HubFrontService {
             throw new ComposerException(composerAnswer.getMsg());
         }
         val array = composerAnswer.getBody();
-        if (array.isObject() || array.size() != 1) {
+        if (array.isObject()) {
+            throw new RouterException("Unexpected composer response.");
+        }
+        if (array.size() != 1) {
             throw new RouterException("Unexpected composer response. Array size: " + array.size());
         }
         return objectMapper.convertValue(array.get(0), type);
